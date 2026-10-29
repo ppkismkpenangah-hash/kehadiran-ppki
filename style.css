@@ -1,0 +1,404 @@
+:root {
+  --navy: #1F3864;
+  --navy-deep: #13233F;
+  --gold: #C9A227;
+  --gold-light: #E9D9A5;
+  --cream: #F7F5EF;
+  --card: #FFFFFF;
+  --ink: #1B1E23;
+  --muted: #6B7280;
+  --line: #E3DFD3;
+  --good: #2E7D46;
+  --good-bg: #E7F3EA;
+  --warn: #A5760C;
+  --warn-bg: #FBF0D6;
+  --bad: #B3382C;
+  --bad-bg: #FBE9E7;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(19,35,63,0.06), 0 8px 24px rgba(19,35,63,0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, .display {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--navy-deep);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+a { color: inherit; }
+
+.topbar {
+  background: var(--navy);
+  color: #F4F1E6;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 3px solid var(--gold);
+}
+
+.topbar .mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #F4F1E6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 4px;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+.topbar .mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gate-wrap .mark-lg {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #F4F1E6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  padding: 8px;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+.gate-wrap .mark-lg img { width: 100%; height: 100%; object-fit: contain; }
+
+.topbar .brandtext { line-height: 1.25; }
+.topbar .brandtext .school { font-weight: 600; font-size: 15px; letter-spacing: 0.02em; }
+.topbar .brandtext .unit { font-size: 13px; color: var(--gold-light); }
+
+.topbar .spacer { flex: 1; }
+
+.topbar a.back {
+  font-size: 14px;
+  color: var(--gold-light);
+  text-decoration: none;
+  border: 1px solid rgba(233,217,165,0.4);
+  padding: 7px 12px;
+  border-radius: 7px;
+}
+.topbar a.back:hover { background: rgba(255,255,255,0.06); }
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.hero {
+  text-align: center;
+  padding: 56px 24px 40px;
+}
+.hero h1 { font-size: clamp(28px, 4vw, 40px); }
+.hero p { color: var(--muted); margin-top: 10px; font-size: 16px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  max-width: 780px;
+  margin: 8px auto 0;
+}
+@media (max-width: 640px) {
+  .portal-grid { grid-template-columns: 1fr; }
+}
+
+.portal-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 28px 24px;
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.portal-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(19,35,63,0.1), 0 14px 30px rgba(19,35,63,0.12); }
+.portal-card .icon {
+  width: 44px; height: 44px; border-radius: 9px;
+  background: var(--navy); color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-family: Arial, Helvetica, sans-serif; font-weight: 600;
+}
+.portal-card h2 { font-size: 21px; }
+.portal-card p { color: var(--muted); font-size: 14.5px; margin: 0; }
+.portal-card .go { margin-top: auto; font-size: 14px; font-weight: 600; color: var(--navy); }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.search-row input[type="text"] {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  font-size: 16px;
+  font-family: inherit;
+  background: #FDFCFA;
+}
+.search-row input[type="text"]:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+
+button.btn, a.btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+button.btn:hover, a.btn:hover { background: var(--navy-deep); }
+button.btn.gold { background: var(--gold); color: var(--navy-deep); }
+button.btn.gold:hover { background: #B8931F; }
+button.btn.ghost { background: transparent; color: var(--navy); border: 1.5px solid var(--line); }
+button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.hint { color: var(--muted); font-size: 13.5px; margin-top: 10px; }
+
+.state-msg {
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14.5px;
+  margin-top: 18px;
+}
+.state-msg.loading { background: #EEF1F6; color: var(--navy); }
+.state-msg.error { background: var(--bad-bg); color: var(--bad); }
+
+.result {
+  margin-top: 26px;
+  display: none;
+}
+.result.show { display: block; }
+
+.result-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+.result-head h2 { font-size: 24px; }
+.result-head .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+.pct-badge {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  padding: 6px 18px;
+  border-radius: 10px;
+  line-height: 1.1;
+  text-align: center;
+}
+.pct-badge .lbl { display: block; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; margin-bottom: 2px; }
+.pct-good { background: var(--good-bg); color: var(--good); }
+.pct-warn { background: var(--warn-bg); color: var(--warn); }
+.pct-bad { background: var(--bad-bg); color: var(--bad); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+th {
+  background: var(--navy);
+  color: #F4F1E6;
+  font-weight: 600;
+  font-size: 13px;
+}
+td.name-cell, th.name-cell { text-align: left; }
+tbody tr:nth-child(even) { background: #FBFAF6; }
+tbody tr:hover { background: var(--gold-light); }
+td.empty-cell { color: var(--line); }
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.badge.good { background: var(--good-bg); color: var(--good); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+.badge.bad { background: var(--bad-bg); color: var(--bad); }
+
+.chart-wrap { margin-top: 22px; }
+.chart-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 10px; }
+
+.table-scroll { overflow-x: auto; }
+
+/* Jadual lebar (Kehadiran Individu Murid — dashboard guru): mampatkan supaya semua 15 lajur
+   muat dalam lebar laman tanpa perlu scroll mendatar pada skrin biasa */
+table.wide-table { font-size: 13px; }
+table.wide-table th, table.wide-table td { padding: 8px 5px; }
+table.wide-table th:nth-child(1), table.wide-table td:nth-child(1) { width: 170px; text-align: left; }
+table.wide-table th:nth-child(n+2):nth-child(-n+13), table.wide-table td:nth-child(n+2):nth-child(-n+13) {
+  width: 50px; font-size: 12.5px;
+}
+table.wide-table th:last-child, table.wide-table td:last-child { width: 75px; }
+
+/* Jadual bulanan (Portal Ibu Bapa) — mampatkan sikit supaya 12 bulan muat tanpa scroll */
+table.month-table th, table.month-table td { padding: 9px 6px; font-size: 13.5px; }
+
+footer.foot {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 30px 24px 50px;
+}
+
+/* Guru dashboard */
+.gate-wrap {
+  max-width: 380px;
+  margin: 80px auto;
+  text-align: center;
+}
+.gate-wrap .card { text-align: left; }
+.gate-wrap h1 { font-size: 24px; margin-bottom: 6px; }
+.gate-wrap p.sub { color: var(--muted); font-size: 14.5px; margin-bottom: 20px; }
+.gate-wrap input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  font-size: 16px;
+  margin-bottom: 14px;
+  font-family: inherit;
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+@media (max-width: 700px) { .kpi-row { grid-template-columns: 1fr; } }
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+}
+.kpi .num { font-family: Arial, Helvetica, sans-serif; font-size: 32px; color: var(--navy-deep); font-weight: 600; }
+.kpi .lbl { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+section.block { margin-top: 32px; }
+section.block h3 { font-size: 18px; margin-bottom: 4px; }
+section.block .desc { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+
+.month-note {
+  background: #EEF1F6;
+  color: var(--navy);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  margin-top: 14px;
+}
+
+/* ====== Cetak (Print) ====== */
+.print-only { display: none; }
+.print-actions { margin-top: 22px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+
+  html, body { background: #fff; }
+  .wrap { padding: 0; max-width: 100%; }
+
+  /* Paksa seksyen tertentu mula di muka surat baharu (guna di dashboard guru) */
+  .page-break { page-break-before: always; break-before: page; }
+
+  .topbar {
+    background: #fff !important;
+    color: #000 !important;
+    border-bottom: 2px solid #000;
+    box-shadow: none;
+  }
+  .topbar .mark { box-shadow: none; background: #fff; }
+  .topbar .brandtext .unit { color: #333 !important; }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #999;
+  }
+
+  /* Pastikan jadual lebar (kehadiran individu) muat penuh, tak terpotong */
+  .table-scroll { overflow: visible !important; }
+  table { font-size: 10px; width: 100%; table-layout: auto; }
+  th, td { padding: 4px 5px; }
+  th { background: #eee !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  tbody tr:nth-child(even) { background: #f7f7f7 !important; }
+
+  /* Jadual kehadiran individu guru: nama lebar, bulan dimampatkan */
+  table.wide-table { font-size: 9.5px; }
+  table.wide-table th:nth-child(1), table.wide-table td:nth-child(1) { width: 118px; white-space: normal; }
+  table.wide-table th:nth-child(n+2):nth-child(-n+13), table.wide-table td:nth-child(n+2):nth-child(-n+13) {
+    width: 32px; max-width: 32px; padding: 4px 2px; font-size: 9px;
+  }
+  table.wide-table th:last-child, table.wide-table td:last-child { width: 50px; }
+
+  .pct-badge, .badge {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .kpi, .portal-card { box-shadow: none; border: 1px solid #999; }
+
+  .print-footer {
+    margin-top: 26px;
+    padding-top: 12px;
+    border-top: 1px solid #999;
+    font-size: 11.5px;
+    color: #333;
+  }
+
+  footer.foot { display: none; }
+}

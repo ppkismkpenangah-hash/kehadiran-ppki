@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semakan Kehadiran — SMK Penangah</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css">
+<style>
+  @media print {
+    @page { size: A4 portrait; margin: 10mm; }
+    .topbar { padding: 8px 16px; }
+    .topbar .mark { width: 30px; height: 30px; }
+    .topbar .brandtext .school { font-size: 13px; }
+    .topbar .brandtext .unit { font-size: 11px; }
+    .card { padding: 14px 18px; }
+    .result-head { padding-bottom: 8px; margin-bottom: 10px; }
+    .result-head h2 { font-size: 18px; }
+    .result-head .sub { font-size: 12px; }
+    .pct-badge { font-size: 20px; padding: 4px 14px; }
+    .pct-badge .lbl { font-size: 9.5px; }
+    table.month-table th, table.month-table td { padding: 5px 4px; font-size: 10.5px; }
+    .chart-wrap { margin-top: 10px; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .chart-title { font-size: 10px; margin-bottom: 4px; }
+    .month-note { margin-top: 8px; padding: 6px 10px; font-size: 10px; }
+    .print-footer { margin-top: 8px; padding-top: 6px; font-size: 9.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="mark"><img src="assets/logo.png" alt="Logo SMK Penangah"></div>
+  <div class="brandtext">
+    <div class="school">SMK PENANGAH</div>
+    <div class="unit">Semakan Kehadiran — Ibu Bapa/Murid</div>
+  </div>
+  <div class="spacer"></div>
+  <a class="back no-print" href="index.html">← Laman Utama</a>
+</div>
+
+<div class="wrap" style="max-width:860px;">
+  <div class="card">
+    <div class="no-print" id="searchSection">
+      <h2 style="font-size:20px; margin-bottom:6px;">Semak Kehadiran Murid</h2>
+      <p class="hint" style="margin-top:0;">Masukkan No. Kad Pengenalan murid (tanpa tanda sempang atau ruang).</p>
+
+      <div class="search-row">
+        <input type="text" id="icInput" placeholder="Cth: 120827120593" inputmode="numeric" autocomplete="off">
+        <button class="btn gold" id="searchBtn">Semak</button>
+      </div>
+
+      <div id="stateMsg"></div>
+    </div>
+
+    <div class="result" id="resultBox">
+      <div class="result-head">
+        <div>
+          <h2 id="rNama">—</h2>
+        </div>
+        <div class="pct-badge" id="pctBadge">
+          <span class="lbl">% KESELURUHAN</span>
+          <span id="pctValue">—</span>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="month-table">
+          <thead>
+            <tr id="monthHeaderRow"></tr>
+          </thead>
+          <tbody>
+            <tr id="monthDataRow"></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-title">Trend Kehadiran Bulanan</div>
+        <div id="chartHolder"></div>
+      </div>
+
+      <div class="month-note">Peratus dikira daripada jumlah keseluruhan hari hadir dibahagi jumlah keseluruhan hari persekolahan sepanjang bulan yang mempunyai data.</div>
+
+      <div class="print-actions no-print">
+        <button class="btn gold" id="printBtn">🖨️ Cetak / Simpan sebagai PDF</button>
+        <button class="btn ghost" id="searchAgainBtn">Semak murid lain</button>
+      </div>
+
+      <div class="print-only print-footer">
+        <div><strong>SMK PENANGAH</strong> — Slip Kehadiran PPKI</div>
+        <div>Dicetak pada: <span id="printDate"></span></div>
+        <div>Dokumen ini dijana daripada rekod kehadiran rasmi PPKI SMK Penangah. Sah untuk kegunaan ibu bapa/penjaga sahaja.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">Data disemak terus daripada rekod kehadiran rasmi PPKI SMK Penangah.</footer>
+
+<script src="script.js"></script>
+<script>
+let studentsCache = null;
+
+async function ensureStudents() {
+  if (studentsCache) return studentsCache;
+  studentsCache = await loadIndividualStudents();
+  return studentsCache;
+}
+
+function setState(msg, type) {
+  const el = document.getElementById("stateMsg");
+  if (!msg) { el.innerHTML = ""; return; }
+  el.innerHTML = `<div class="state-msg ${type}">${msg}</div>`;
+}
+
+function renderResult(student) {
+  document.getElementById("rNama").textContent = student.nama;
+
+  const pct = student.pct;
+  const pctEl = document.getElementById("pctBadge");
+  pctEl.className = "pct-badge " + (pct === null ? "" : "pct-" + pctClass(pct));
+  document.getElementById("pctValue").textContent = fmtPct(pct);
+
+  const headRow = document.getElementById("monthHeaderRow");
+  const dataRow = document.getElementById("monthDataRow");
+  headRow.innerHTML = "";
+  dataRow.innerHTML = "";
+  MONTHS.forEach((m, i) => {
+    const th = document.createElement("th");
+    th.textContent = m.slice(0,3);
+    headRow.appendChild(th);
+    const td = document.createElement("td");
+    const cell = student.months[i];
+    if (cell === null || cell === undefined || String(cell).trim() === "") {
+      td.textContent = "—";
+      td.className = "empty-cell";
+    } else {
+      td.textContent = cell;
+    }
+    dataRow.appendChild(td);
+  });
+
+  const chartPoints = MONTHS.map((m, i) => {
+    const f = parseFraction(student.months[i]);
+    return { label: m, value: f ? (f.hadir / f.jumlah) * 100 : null };
+  });
+  document.getElementById("chartHolder").innerHTML = svgLineChart(chartPoints, { width: 680, height: 220 });
+
+  document.getElementById("resultBox").classList.add("show");
+}
+
+async function doSearch() {
+  const ic = document.getElementById("icInput").value.trim();
+  document.getElementById("resultBox").classList.remove("show");
+  if (!ic) { setState("Sila masukkan No. Kad Pengenalan murid.", "error"); return; }
+  setState("Sedang menyemak rekod…", "loading");
+  try {
+    const students = await ensureStudents();
+    const found = findStudentByIC(students, ic);
+    if (!found) {
+      setState("Tiada rekod murid ditemui untuk No. Kad Pengenalan tersebut. Sila semak semula nombor, atau hubungi guru kelas.", "error");
+      return;
+    }
+    setState(null);
+    renderResult(found);
+  } catch (e) {
+    setState("Ralat menyemak data: " + e.message + ". Sila cuba lagi sebentar.", "error");
+  }
+}
+
+document.getElementById("searchBtn").addEventListener("click", doSearch);
+document.getElementById("icInput").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+
+document.getElementById("printBtn").addEventListener("click", () => {
+  const now = new Date();
+  document.getElementById("printDate").textContent = now.toLocaleString("ms-MY", { dateStyle: "long", timeStyle: "short" });
+  window.print();
+});
+document.getElementById("searchAgainBtn").addEventListener("click", () => {
+  document.getElementById("resultBox").classList.remove("show");
+  document.getElementById("searchSection").style.display = "";
+  document.getElementById("icInput").value = "";
+  document.getElementById("icInput").focus();
+  setState(null);
+});
+</script>
+</body>
+</html>

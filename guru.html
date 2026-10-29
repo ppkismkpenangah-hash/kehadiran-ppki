@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Guru — Kehadiran PPKI SMK Penangah</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css">
+<style>
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="mark"><img src="assets/logo.png" alt="Logo SMK Penangah"></div>
+  <div class="brandtext">
+    <div class="school">SMK PENANGAH</div>
+    <div class="unit">Dashboard Guru — Kehadiran PPKI</div>
+  </div>
+  <div class="spacer"></div>
+  <a class="back no-print" href="index.html">← Laman Utama</a>
+</div>
+
+<!-- Gate kata laluan -->
+<div class="wrap" id="gateWrap">
+  <div class="gate-wrap">
+    <div class="card">
+      <div class="mark-lg"><img src="assets/logo.png" alt="Logo SMK Penangah"></div>
+      <h1>Log Masuk Guru</h1>
+      <p class="sub">Masukkan kata laluan untuk akses dashboard kehadiran kelas.</p>
+      <input type="password" id="pwInput" placeholder="Kata laluan" autocomplete="off">
+      <button class="btn gold" style="width:100%;" id="pwBtn">Log Masuk</button>
+      <div id="pwState"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard (disembunyikan sehingga log masuk) -->
+<div class="wrap" id="dashWrap" style="display:none;">
+
+  <div id="loadState"></div>
+
+  <div id="dashContent" style="display:none;">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="num" id="kpiAvg">—</div>
+        <div class="lbl">Purata Kehadiran Kelas Keseluruhan</div>
+      </div>
+      <div class="kpi">
+        <div class="num" id="kpiStudents">—</div>
+        <div class="lbl">Jumlah Murid Direkodkan</div>
+      </div>
+      <div class="kpi">
+        <div class="num" id="kpiMonths">—</div>
+        <div class="lbl">Bulan Ada Data Setakat Ini</div>
+      </div>
+    </div>
+
+    <section class="block">
+      <h3>Trend Kehadiran Bulanan Kelas</h3>
+      <div class="desc">Peratus kehadiran keseluruhan kelas PPKI setiap bulan (Kehadiran MOEIS).</div>
+      <div class="card"><div id="classChart"></div></div>
+    </section>
+
+    <section class="block page-break">
+      <h3>Kehadiran Individu Murid</h3>
+      <div class="desc">Pecahan hari hadir/jumlah hari persekolahan setiap bulan, dan % keseluruhan.</div>
+      <div class="card">
+        <div class="table-scroll">
+          <table class="wide-table">
+            <thead>
+              <tr id="studentHeadRow"></tr>
+            </thead>
+            <tbody id="studentBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="block page-break">
+      <h3>Perbandingan Kehadiran Antara Murid</h3>
+      <div class="desc">Susun ikut % kehadiran keseluruhan, dari tertinggi ke terendah.</div>
+      <div class="card"><div id="studentBarChart"></div></div>
+    </section>
+
+    <div class="no-print" style="text-align:center; margin-top:30px;">
+      <button class="btn gold" id="printBtn">🖨️ Cetak / Simpan sebagai PDF</button>
+      <button class="btn ghost" id="refreshBtn">Muat Semula Data</button>
+      <button class="btn ghost" id="logoutBtn">Log Keluar</button>
+    </div>
+
+    <div class="print-only print-footer">
+      <div><strong>SMK PENANGAH</strong> — Dashboard Kehadiran PPKI (Guru)</div>
+      <div>Dicetak pada: <span id="printDate"></span></div>
+      <div>Dokumen ini dijana daripada rekod kehadiran rasmi PPKI SMK Penangah. Untuk kegunaan dalaman guru sahaja.</div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">Data ditarik terus daripada Google Sheet rasmi kelas PPKI. Sebarang perubahan dalam sheet akan dipaparkan pada muatan seterusnya.</footer>
+
+<script src="script.js"></script>
+<script>
+const PASSWORD = "123456";
+const SESSION_KEY = "ppki_guru_session";
+
+function setPwState(msg) {
+  document.getElementById("pwState").innerHTML = msg ? `<div class="state-msg error">${msg}</div>` : "";
+}
+
+function unlock() {
+  document.getElementById("gateWrap").style.display = "none";
+  document.getElementById("dashWrap").style.display = "block";
+  loadDashboard();
+}
+
+document.getElementById("pwBtn").addEventListener("click", () => {
+  const val = document.getElementById("pwInput").value;
+  if (val === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, "1");
+    unlock();
+  } else {
+    setPwState("Kata laluan salah. Sila cuba lagi.");
+  }
+});
+document.getElementById("pwInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("pwBtn").click();
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+});
+
+if (sessionStorage.getItem(SESSION_KEY) === "1") {
+  unlock();
+}
+
+function setLoadState(msg, type) {
+  const el = document.getElementById("loadState");
+  el.innerHTML = msg ? `<div class="state-msg ${type}">${msg}</div>` : "";
+}
+
+async function loadDashboard() {
+  setLoadState("Sedang memuatkan data kehadiran…", "loading");
+  document.getElementById("dashContent").style.display = "none";
+  try {
+    const [monthly, students] = await Promise.all([loadMonthlyClass(), loadIndividualStudents()]);
+    setLoadState(null);
+    renderDashboard(monthly, students);
+    document.getElementById("dashContent").style.display = "block";
+  } catch (e) {
+    setLoadState("Gagal memuatkan data: " + e.message + ". Sila semak sambungan internet atau cuba muat semula.", "error");
+  }
+}
+
+function renderDashboard(monthly, students) {
+  // KPI: purata kelas keseluruhan (guna data bulanan yang ada)
+  const monthsWithData = monthly.filter(m => m.pct !== null);
+  const classAvg = monthsWithData.length
+    ? monthsWithData.reduce((s, m) => s + m.pct, 0) / monthsWithData.length
+    : null;
+  document.getElementById("kpiAvg").textContent = fmtPct(classAvg);
+  document.getElementById("kpiStudents").textContent = students.length;
+  document.getElementById("kpiMonths").textContent = countMonthsWithData(students) + " / 12";
+
+  // Carta trend bulanan kelas
+  const classPoints = monthly.map(m => ({ label: m.bulan, value: m.pct }));
+  document.getElementById("classChart").innerHTML = svgLineChart(classPoints, { width: 900, height: 240 });
+
+  // Jadual individu murid
+  const headRow = document.getElementById("studentHeadRow");
+  headRow.innerHTML = `<th class="name-cell">Nama Murid</th>` +
+    MONTHS.map(m => `<th>${m.slice(0,3)}</th>`).join("") +
+    `<th>% Keseluruhan</th>`;
+
+  const body = document.getElementById("studentBody");
+  body.innerHTML = "";
+  students.forEach(s => {
+    const tr = document.createElement("tr");
+    let cells = `<td class="name-cell">${s.nama}</td>`;
+    MONTHS.forEach((m, i) => {
+      const v = s.months[i];
+      if (v === null || v === undefined || String(v).trim() === "") {
+        cells += `<td class="empty-cell">—</td>`;
+      } else {
+        cells += `<td>${v}</td>`;
+      }
+    });
+    const cls = s.pct === null ? "" : pctClass(s.pct);
+    cells += `<td><span class="badge ${cls}">${fmtPct(s.pct)}</span></td>`;
+    tr.innerHTML = cells;
+    body.appendChild(tr);
+  });
+
+  // Carta bar perbandingan murid
+  const sorted = [...students].sort((a, b) => (b.pct || 0) - (a.pct || 0));
+  const barPoints = sorted.map(s => ({ label: s.nama, value: s.pct }));
+  document.getElementById("studentBarChart").innerHTML = svgBarChart(barPoints, { width: 780, barHeight: 24, gap: 12, labelWidth: 230 });
+}
+
+document.getElementById("refreshBtn").addEventListener("click", loadDashboard);
+
+document.getElementById("printBtn").addEventListener("click", () => {
+  const now = new Date();
+  document.getElementById("printDate").textContent = now.toLocaleString("ms-MY", { dateStyle: "long", timeStyle: "short" });
+  window.print();
+});
+</script>
+</body>
+</html>
