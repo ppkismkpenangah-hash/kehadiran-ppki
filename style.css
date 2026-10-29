@@ -1,6 +1,6 @@
 :root {
-  --navy: #1F3864;
-  --navy-deep: #13233F;
+  --green: #1E5B2E;
+  --green-deep: #14401F;
   --gold: #C9A227;
   --gold-light: #E9D9A5;
   --cream: #F7F5EF;
@@ -15,7 +15,7 @@
   --bad: #B3382C;
   --bad-bg: #FBE9E7;
   --radius: 10px;
-  --shadow: 0 1px 2px rgba(19,35,63,0.06), 0 8px 24px rgba(19,35,63,0.08);
+  --shadow: 0 1px 2px rgba(20,64,31,0.06), 0 8px 24px rgba(20,64,31,0.08);
 }
 
 * { box-sizing: border-box; }
@@ -23,7 +23,8 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--cream);
+  background: linear-gradient(135deg, #FBF6EA 0%, #F4F5E6 50%, #E8F0E2 100%) fixed;
+  min-height: 100vh;
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
@@ -32,80 +33,59 @@ html, body {
 
 h1, h2, h3, .display {
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--navy-deep);
+  color: var(--green-deep);
   margin: 0;
   letter-spacing: -0.01em;
 }
 
 a { color: inherit; }
 
-.topbar {
-  background: var(--navy);
-  color: #F4F1E6;
-  padding: 18px 24px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  border-bottom: 3px solid var(--gold);
-}
+.head-wrap { margin: 0 auto; padding: 28px 24px 0; }
 
-.topbar .mark {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: #F4F1E6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  padding: 4px;
-  box-shadow: 0 0 0 2px var(--gold);
-}
-.topbar .mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.gate-wrap .mark-lg {
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  background: #F4F1E6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-  padding: 8px;
-  box-shadow: 0 0 0 2px var(--gold);
-}
-.gate-wrap .mark-lg img { width: 100%; height: 100%; object-fit: contain; }
-
-.topbar .brandtext { line-height: 1.25; }
-.topbar .brandtext .school { font-weight: 600; font-size: 15px; letter-spacing: 0.02em; }
-.topbar .brandtext .unit { font-size: 13px; color: var(--gold-light); }
-
-.topbar .spacer { flex: 1; }
-
-.topbar a.back {
-  font-size: 14px;
-  color: var(--gold-light);
+.back-pill {
+  display: inline-block;
+  background: #fff;
+  color: var(--green-deep);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 10px 18px;
+  border-radius: 999px;
   text-decoration: none;
-  border: 1px solid rgba(233,217,165,0.4);
-  padding: 7px 12px;
-  border-radius: 7px;
+  box-shadow: 0 1px 2px rgba(20,64,31,0.08), 0 4px 12px rgba(20,64,31,0.06);
+  margin-bottom: 16px;
 }
-.topbar a.back:hover { background: rgba(255,255,255,0.06); }
+.back-pill:hover { background: #F4F8F0; }
+
+.topbar {
+  background: linear-gradient(120deg, #1B5A2B 0%, #2A7A3B 65%, #3C8B3C 100%);
+  color: #fff;
+  padding: 26px 30px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: var(--shadow);
+}
+.topbar .logo { width: 88px; height: 88px; object-fit: contain; flex-shrink: 0; }
+.topbar .brandtext { line-height: 1.25; }
+.topbar .eyebrow { color: #E3B72E; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.topbar .brandtext .school { font-weight: 800; font-size: 30px; line-height: 1.15; margin: 3px 0 5px; }
+.topbar .brandtext .unit { font-size: 15px; color: #F1F5E8; }
+@media (max-width: 560px) {
+  .topbar { padding: 18px; gap: 16px; }
+  .topbar .logo { width: 64px; height: 64px; }
+  .topbar .brandtext .school { font-size: 22px; }
+}
 
 .wrap {
   max-width: 1040px;
   margin: 0 auto;
-  padding: 40px 24px 64px;
+  padding: 24px 24px 64px;
 }
 
 .hero {
   text-align: center;
-  padding: 56px 24px 40px;
+  padding: 24px 24px 28px;
 }
 .hero h1 { font-size: clamp(28px, 4vw, 40px); }
 .hero p { color: var(--muted); margin-top: 10px; font-size: 16px; max-width: 480px; margin-left: auto; margin-right: auto; }
@@ -134,16 +114,16 @@ a { color: inherit; }
   gap: 10px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.portal-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(19,35,63,0.1), 0 14px 30px rgba(19,35,63,0.12); }
+.portal-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(20,64,31,0.1), 0 14px 30px rgba(20,64,31,0.12); }
 .portal-card .icon {
   width: 44px; height: 44px; border-radius: 9px;
-  background: var(--navy); color: var(--gold);
+  background: var(--green); color: var(--gold);
   display: flex; align-items: center; justify-content: center;
   font-size: 20px; font-family: Arial, Helvetica, sans-serif; font-weight: 600;
 }
 .portal-card h2 { font-size: 21px; }
 .portal-card p { color: var(--muted); font-size: 14.5px; margin: 0; }
-.portal-card .go { margin-top: auto; font-size: 14px; font-weight: 600; color: var(--navy); }
+.portal-card .go { margin-top: auto; font-size: 14px; font-weight: 600; color: var(--green); }
 
 .card {
   background: var(--card);
@@ -166,12 +146,12 @@ a { color: inherit; }
   border: 1.5px solid var(--line);
   font-size: 16px;
   font-family: inherit;
-  background: #FDFCFA;
+  background: #FBF7EE;
 }
-.search-row input[type="text"]:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+.search-row input[type="text"]:focus { outline: 2px solid var(--green); border-color: var(--green); }
 
 button.btn, a.btn {
-  background: var(--navy);
+  background: var(--green);
   color: #fff;
   border: none;
   padding: 12px 20px;
@@ -186,10 +166,10 @@ button.btn, a.btn {
   justify-content: center;
   gap: 8px;
 }
-button.btn:hover, a.btn:hover { background: var(--navy-deep); }
-button.btn.gold { background: var(--gold); color: var(--navy-deep); }
-button.btn.gold:hover { background: #B8931F; }
-button.btn.ghost { background: transparent; color: var(--navy); border: 1.5px solid var(--line); }
+button.btn:hover, a.btn:hover { background: var(--green-deep); }
+button.btn.primary { background: #1B4D2B; color: #fff; }
+button.btn.primary:hover { background: var(--green-deep); }
+button.btn.ghost { background: transparent; color: var(--green); border: 1.5px solid var(--line); }
 button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
 .hint { color: var(--muted); font-size: 13.5px; margin-top: 10px; }
@@ -200,7 +180,7 @@ button.btn:disabled { opacity: 0.55; cursor: not-allowed; }
   font-size: 14.5px;
   margin-top: 18px;
 }
-.state-msg.loading { background: #EEF1F6; color: var(--navy); }
+.state-msg.loading { background: #EAF2E7; color: var(--green); }
 .state-msg.error { background: var(--bad-bg); color: var(--bad); }
 
 .result {
@@ -247,7 +227,7 @@ th, td {
   border-bottom: 1px solid var(--line);
 }
 th {
-  background: var(--navy);
+  background: var(--green);
   color: #F4F1E6;
   font-weight: 600;
   font-size: 13px;
@@ -296,7 +276,7 @@ footer.foot {
 /* Guru dashboard */
 .gate-wrap {
   max-width: 380px;
-  margin: 80px auto;
+  margin: 16px auto 40px;
   text-align: center;
 }
 .gate-wrap .card { text-align: left; }
@@ -326,7 +306,7 @@ footer.foot {
   padding: 20px 22px;
   box-shadow: var(--shadow);
 }
-.kpi .num { font-family: Arial, Helvetica, sans-serif; font-size: 32px; color: var(--navy-deep); font-weight: 600; }
+.kpi .num { font-family: Arial, Helvetica, sans-serif; font-size: 32px; color: var(--green-deep); font-weight: 600; }
 .kpi .lbl { color: var(--muted); font-size: 13px; margin-top: 4px; }
 
 section.block { margin-top: 32px; }
@@ -334,8 +314,8 @@ section.block h3 { font-size: 18px; margin-bottom: 4px; }
 section.block .desc { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
 
 .month-note {
-  background: #EEF1F6;
-  color: var(--navy);
+  background: #EAF2E7;
+  color: var(--green);
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 13.5px;
@@ -356,14 +336,20 @@ section.block .desc { color: var(--muted); font-size: 14px; margin-bottom: 16px;
   /* Paksa seksyen tertentu mula di muka surat baharu (guna di dashboard guru) */
   .page-break { page-break-before: always; break-before: page; }
 
+  .head-wrap { padding: 0; }
   .topbar {
     background: #fff !important;
     color: #000 !important;
     border-bottom: 2px solid #000;
+    border-radius: 0;
     box-shadow: none;
+    padding: 6px 0 8px;
+    gap: 12px;
   }
-  .topbar .mark { box-shadow: none; background: #fff; }
-  .topbar .brandtext .unit { color: #333 !important; }
+  .topbar .logo { width: 40px; height: 40px; }
+  .topbar .eyebrow { color: #444 !important; font-size: 9px; }
+  .topbar .brandtext .school { color: #000 !important; font-size: 16px; margin: 1px 0 2px; }
+  .topbar .brandtext .unit { color: #333 !important; font-size: 11px; }
 
   .card {
     box-shadow: none !important;

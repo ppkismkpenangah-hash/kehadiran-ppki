@@ -149,10 +149,10 @@ function svgLineChart(points, opts) {
     const x = xFor(i), y = yFor(p.value);
     pathD += (started ? " L" : " M") + x + "," + y;
     started = true;
-    dots += `<circle cx="${x}" cy="${y}" r="3.5" fill="#C9A227" stroke="#1F3864" stroke-width="1.2"/>`;
+    dots += `<circle cx="${x}" cy="${y}" r="3.5" fill="#C9A227" stroke="#1E5B2E" stroke-width="1.2"/>`;
     // Label peratus di atas titik; jika terlalu tinggi (dekat 100%), letak di bawah supaya tak terpotong
     const labelY = p.value >= 92 ? y + 16 : y - 9;
-    valueLabels += `<text x="${x}" y="${labelY}" font-size="10.5" font-weight="600" fill="#13233F" text-anchor="middle">${p.value.toFixed(1)}%</text>`;
+    valueLabels += `<text x="${x}" y="${labelY}" font-size="10.5" font-weight="600" fill="#14401F" text-anchor="middle">${p.value.toFixed(1)}%</text>`;
   });
 
   let labels = "";
@@ -162,7 +162,7 @@ function svgLineChart(points, opts) {
 
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="Carta trend kehadiran">
     ${gridLines}
-    <path d="${pathD}" fill="none" stroke="#1F3864" stroke-width="2.5"/>
+    <path d="${pathD}" fill="none" stroke="#1E5B2E" stroke-width="2.5"/>
     ${dots}
     ${valueLabels}
     ${labels}

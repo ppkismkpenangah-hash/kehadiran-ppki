@@ -9,10 +9,6 @@
 <style>
   @media print {
     @page { size: A4 portrait; margin: 10mm; }
-    .topbar { padding: 8px 16px; }
-    .topbar .mark { width: 30px; height: 30px; }
-    .topbar .brandtext .school { font-size: 13px; }
-    .topbar .brandtext .unit { font-size: 11px; }
     .card { padding: 14px 18px; }
     .result-head { padding-bottom: 8px; margin-bottom: 10px; }
     .result-head h2 { font-size: 18px; }
@@ -29,14 +25,16 @@
 </head>
 <body>
 
-<div class="topbar">
-  <div class="mark"><img src="assets/logo.png" alt="Logo SMK Penangah"></div>
-  <div class="brandtext">
-    <div class="school">SMK PENANGAH</div>
-    <div class="unit">Semakan Kehadiran — Ibu Bapa/Murid</div>
+<div class="head-wrap" style="max-width:860px;">
+  <a class="back-pill no-print" href="index.html">← Laman Utama</a>
+  <div class="topbar">
+    <img class="logo" src="logo.png" alt="Logo SMK Penangah">
+    <div class="brandtext">
+      <div class="eyebrow">Program Pendidikan Khas Integrasi</div>
+      <div class="school">SMK PENANGAH</div>
+      <div class="unit">Semakan Kehadiran — Ibu Bapa/Murid</div>
+    </div>
   </div>
-  <div class="spacer"></div>
-  <a class="back no-print" href="index.html">← Laman Utama</a>
 </div>
 
 <div class="wrap" style="max-width:860px;">
@@ -47,7 +45,7 @@
 
       <div class="search-row">
         <input type="text" id="icInput" placeholder="Cth: 120827120593" inputmode="numeric" autocomplete="off">
-        <button class="btn gold" id="searchBtn">Semak</button>
+        <button class="btn primary" id="searchBtn">Semak</button>
       </div>
 
       <div id="stateMsg"></div>
@@ -83,7 +81,7 @@
       <div class="month-note">Peratus dikira daripada jumlah keseluruhan hari hadir dibahagi jumlah keseluruhan hari persekolahan sepanjang bulan yang mempunyai data.</div>
 
       <div class="print-actions no-print">
-        <button class="btn gold" id="printBtn">🖨️ Cetak / Simpan sebagai PDF</button>
+        <button class="btn primary" id="printBtn">🖨️ Cetak / Simpan sebagai PDF</button>
         <button class="btn ghost" id="searchAgainBtn">Semak murid lain</button>
       </div>
 

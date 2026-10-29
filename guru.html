@@ -14,25 +14,26 @@
 </head>
 <body>
 
-<div class="topbar">
-  <div class="mark"><img src="assets/logo.png" alt="Logo SMK Penangah"></div>
-  <div class="brandtext">
-    <div class="school">SMK PENANGAH</div>
-    <div class="unit">Dashboard Guru — Kehadiran PPKI</div>
+<div class="head-wrap" style="max-width:1040px;">
+  <a class="back-pill no-print" href="index.html">← Laman Utama</a>
+  <div class="topbar">
+    <img class="logo" src="logo.png" alt="Logo SMK Penangah">
+    <div class="brandtext">
+      <div class="eyebrow">Program Pendidikan Khas Integrasi</div>
+      <div class="school">SMK PENANGAH</div>
+      <div class="unit">Dashboard Guru — Kehadiran PPKI</div>
+    </div>
   </div>
-  <div class="spacer"></div>
-  <a class="back no-print" href="index.html">← Laman Utama</a>
 </div>
 
 <!-- Gate kata laluan -->
 <div class="wrap" id="gateWrap">
   <div class="gate-wrap">
     <div class="card">
-      <div class="mark-lg"><img src="assets/logo.png" alt="Logo SMK Penangah"></div>
       <h1>Log Masuk Guru</h1>
       <p class="sub">Masukkan kata laluan untuk akses dashboard kehadiran kelas.</p>
       <input type="password" id="pwInput" placeholder="Kata laluan" autocomplete="off">
-      <button class="btn gold" style="width:100%;" id="pwBtn">Log Masuk</button>
+      <button class="btn primary" style="width:100%;" id="pwBtn">Log Masuk</button>
       <div id="pwState"></div>
     </div>
   </div>
@@ -87,7 +88,7 @@
     </section>
 
     <div class="no-print" style="text-align:center; margin-top:30px;">
-      <button class="btn gold" id="printBtn">🖨️ Cetak / Simpan sebagai PDF</button>
+      <button class="btn primary" id="printBtn">🖨️ Cetak / Simpan sebagai PDF</button>
       <button class="btn ghost" id="refreshBtn">Muat Semula Data</button>
       <button class="btn ghost" id="logoutBtn">Log Keluar</button>
     </div>
